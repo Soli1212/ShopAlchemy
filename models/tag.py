@@ -12,6 +12,4 @@ class Tag(Base):
 
     product_tags: Mapped[list["ProductTag"]] = relationship("ProductTag", back_populates="tag")  # type: ignore
 
-    __table_args__ = (
-        UniqueConstraint("name", name="uq_tag_name"),
-    )
+    __table_args__ = (UniqueConstraint("name", name="uq_tag_name"),)

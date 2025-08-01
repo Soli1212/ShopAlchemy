@@ -19,6 +19,4 @@ class Brand(Base):
 
     products: Mapped[list["Product"]] = relationship("Product", back_populates="brand")
 
-    __table_args__ = (
-        UniqueConstraint("name", name="uq_brand_name"),
-    )
+    __table_args__ = (UniqueConstraint("name", name="uq_brand_name"),)

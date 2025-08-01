@@ -35,4 +35,4 @@ class UserAddress(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     user: Mapped["User"] = relationship(back_populates="addresses")
-    orders: Mapped[list["orders"]] = relationship("orders", back_populates="address") # type: ignore
+    orders: Mapped[list["orders"]] = relationship("orders", back_populates="address")  # type: ignore
