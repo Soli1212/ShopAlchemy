@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from connection import Base
 
 from .product import Product
-from .variant_attribute import VariantAttribute
+from .variant_config import VariantConfig
 from .variant_image import VariantImage
 
 
@@ -31,12 +31,11 @@ class ProductVariant(Base):
     )
 
     price_override: Mapped[Decimal | None] = mapped_column(DECIMAL(8, 2), nullable=True)
+    discount_percentage: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     sku: Mapped[str] = mapped_column(String(100), nullable=False)
 
     stock: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-
-    discount_percentage: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
@@ -46,4 +45,6 @@ class ProductVariant(Base):
         "VariantImage", back_populates="variant"
     )
 
-    attributes: Mapped[list["VariantAttribute"]] = relationship("VariantAttribute")
+    config: Mapped[list["VariantConfig"]] = relationship(
+        "VariantConfig", back_populates="variant"
+    )

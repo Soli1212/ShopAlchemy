@@ -23,7 +23,7 @@ class ProductAttribute(Base):
         nullable=False,
     )
 
-    default_value: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    default_value: Mapped[str] = mapped_column(String(100))
 
     product = relationship("Product", back_populates="product_attributes")
 
