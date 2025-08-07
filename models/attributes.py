@@ -13,14 +13,8 @@ class Attribute(Base):
 
     label: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
-    is_required: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
-
     product_attributes: Mapped[list["ProductAttribute"]] = relationship(  # type: ignore
         "ProductAttribute", back_populates="attribute"
-    )
-
-    variant_attributes: Mapped[list["VariantAttribute"]] = relationship(  # type: ignore
-        "VariantAttribute", back_populates="attribute"
     )
 
     __table_args__ = (

@@ -12,5 +12,6 @@ from .product_variant import ProductVariant
 from .tag import Tag
 from .user import User
 from .user_address import UserAddress
-from .variant_attribute import VariantAttribute
+from .variant_config import VariantConfig
 from .variant_image import VariantImage
+from .variant_option import VariantOption

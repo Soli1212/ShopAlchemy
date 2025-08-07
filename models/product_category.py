@@ -1,5 +1,4 @@
-from sqlalchemy import (BigInteger, ForeignKey, Index, Integer, String,
-                        UniqueConstraint)
+from sqlalchemy import BigInteger, ForeignKey, Index, Integer, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from connection import Base

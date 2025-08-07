@@ -1,5 +1,5 @@
 from sqlalchemy import ForeignKey, Index, String, UniqueConstraint
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from connection import Base
 
