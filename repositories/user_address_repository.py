@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import and_, insert, update
+from sqlalchemy import and_, insert, update, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -65,6 +65,7 @@ class UserAddressRepository:
     async def update_address(
         self,
         address_id: int,
+        user_id: str,
         full_name: Optional[str] = None,
         phone_number: Optional[str] = None,
         province: Optional[str] = None,
@@ -100,7 +101,10 @@ class UserAddressRepository:
 
         stmt = (
             update(UserAddress)
-            .where(UserAddress.id == address_id)
+            .where(
+                UserAddress.id == address_id,
+                UserAddress.user_id == user_id
+            )
             .values(**update_data)
             .returning(UserAddress)
         )
@@ -114,22 +118,27 @@ class UserAddressRepository:
             print(f"Error updating address: {e}")
             return None
 
-    async def delete_address(self, address_id: int) -> bool:
-        stmt = select(UserAddress).where(UserAddress.id == address_id)
+    async def delete_address(self, address_id: int, user_id: str) -> bool:
+        """delete user address"""
+        stmt = select(UserAddress).where(
+            UserAddress.id == address_id,
+            UserAddress.user_id == user_id
+        )
         result = await self.session.execute(stmt)
         address = result.scalar_one_or_none()
         if address:
             await self.session.delete(address)
-            await self.session.commit()
             return True
         return False
 
     async def get_user_addresses(self, user_id: str) -> list[UserAddress]:
+        """Get a list of user addresses"""
         stmt = select(UserAddress).where(UserAddress.user_id == user_id)
         result = await self.session.execute(stmt)
         return result.scalars().all()
 
     async def get_default_address(self, user_id: str) -> Optional[UserAddress]:
+        """Get the user's default address"""
         stmt = select(UserAddress).where(
             and_(
                 UserAddress.user_id == user_id,
@@ -138,3 +147,9 @@ class UserAddressRepository:
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
+
+    async def count_user_addresses(self, user_id: int) -> int:
+        """Get the total number of user addresses"""
+        stmt = select(func.count()).select_from(UserAddress).where(UserAddress.user_id == user_id)
+        result = await self.session.execute(stmt)
+        return result.scalar_one()
