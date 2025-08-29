@@ -1,6 +1,6 @@
-import uuid
 from decimal import Decimal
 
+import uuid6
 from sqlalchemy import DECIMAL, Boolean, ForeignKey, Index, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -21,7 +21,7 @@ class ProductVariant(Base):
     )
 
     id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=lambda: str(uuid.uuid4())
+        String(36), primary_key=True, default=lambda: str(uuid6.uuid7())
     )
 
     product_id: Mapped[str] = mapped_column(
@@ -31,7 +31,6 @@ class ProductVariant(Base):
     )
 
     price_override: Mapped[Decimal | None] = mapped_column(DECIMAL(8, 2), nullable=True)
-    discount_percentage: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     sku: Mapped[str] = mapped_column(String(100), nullable=False)
 

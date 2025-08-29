@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import ForeignKey, Index, String
+from sqlalchemy import ForeignKey, Index, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from connection import Base
@@ -16,9 +16,7 @@ class VariantImage(Base):
         ),
     )
 
-    id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=lambda: str(uuid.uuid4())
-    )
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
 
     variant_id: Mapped[str] = mapped_column(
         String(36),

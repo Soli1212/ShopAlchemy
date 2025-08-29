@@ -9,7 +9,7 @@ load_dotenv()
 
 DATABASE_URL = getenv("DATABASE_URL")
 
-engine = create_async_engine(url=DATABASE_URL, echo=True)
+engine = create_async_engine(url=DATABASE_URL, echo=False)
 
 async_session = async_sessionmaker(
     bind=engine, class_=AsyncSession, expire_on_commit=False

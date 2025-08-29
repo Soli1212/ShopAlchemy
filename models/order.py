@@ -2,6 +2,7 @@ import enum
 from datetime import datetime
 from decimal import Decimal
 
+import uuid6
 from sqlalchemy import DECIMAL, DateTime
 from sqlalchemy import Enum as SqlEnum
 from sqlalchemy import ForeignKey, Index, String, Text, func
@@ -33,7 +34,11 @@ class Order(Base):
         Index("ix_orders_user_id_status", "user_id", "status"),
     )
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[str] = mapped_column(
+        String(36),
+        primary_key=True,
+        default=lambda: str(uuid6.uuid7()),
+    )
 
     user_id: Mapped[str] = mapped_column(
         String(36), ForeignKey("users.id", ondelete="CASCADE", onupdate="CASCADE")

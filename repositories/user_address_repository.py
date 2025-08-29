@@ -1,7 +1,8 @@
 from datetime import datetime
+from logging import error
 from typing import Optional
 
-from sqlalchemy import and_, insert, update, func
+from sqlalchemy import and_, func, insert, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -23,7 +24,7 @@ class UserAddressRepository:
             await self.session.execute(stmt)
             return True
         except Exception as e:
-            print(f"Error creating user address: {e}")
+            error(f"Error creating user address: {e}")
             return False
 
     async def create(
@@ -59,7 +60,7 @@ class UserAddressRepository:
             result = await self.session.execute(stmt)
             return result.scalar_one()
         except Exception as e:
-            print(f"Error creating user address: {e}")
+            error(f"Error creating user address: {e}")
             return None
 
     async def update_address(
@@ -101,10 +102,7 @@ class UserAddressRepository:
 
         stmt = (
             update(UserAddress)
-            .where(
-                UserAddress.id == address_id,
-                UserAddress.user_id == user_id
-            )
+            .where(UserAddress.id == address_id, UserAddress.user_id == user_id)
             .values(**update_data)
             .returning(UserAddress)
         )
@@ -115,14 +113,13 @@ class UserAddressRepository:
             return result.scalar_one_or_none()
 
         except Exception as e:
-            print(f"Error updating address: {e}")
+            error(f"Error updating address: {e}")
             return None
 
     async def delete_address(self, address_id: int, user_id: str) -> bool:
         """delete user address"""
         stmt = select(UserAddress).where(
-            UserAddress.id == address_id,
-            UserAddress.user_id == user_id
+            UserAddress.id == address_id, UserAddress.user_id == user_id
         )
         result = await self.session.execute(stmt)
         address = result.scalar_one_or_none()
@@ -150,6 +147,10 @@ class UserAddressRepository:
 
     async def count_user_addresses(self, user_id: int) -> int:
         """Get the total number of user addresses"""
-        stmt = select(func.count()).select_from(UserAddress).where(UserAddress.user_id == user_id)
+        stmt = (
+            select(func.count())
+            .select_from(UserAddress)
+            .where(UserAddress.user_id == user_id)
+        )
         result = await self.session.execute(stmt)
         return result.scalar_one()

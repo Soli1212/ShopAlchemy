@@ -1,4 +1,5 @@
 from datetime import datetime
+from logging import error
 from typing import Optional
 
 from sqlalchemy import and_, desc, exists, insert, update
@@ -26,10 +27,9 @@ class UserRepository:
         )
         try:
             result = await self.session.execute(stmt)
-            await self.session.commit()
             return result.scalars().first()
         except Exception as e:
-            print(f"Error creating user: {e}")
+            error(f"Error creating user: {e}")
             return None
 
     async def exists_by_phone_number(self, phone_number: str) -> bool:
@@ -81,7 +81,7 @@ class UserRepository:
             result = await self.session.execute(stmt)
             return result.fetchone()
         except Exception as e:
-            print(f"Error fetching user profile: {e}")
+            error(f"Error fetching user profile: {e}")
             return None
 
     async def update_user_info(
@@ -117,5 +117,5 @@ class UserRepository:
             user = result.scalar_one_or_none()
             return user
         except Exception as e:
-            print(f"Error updating user info: {e}")
+            error(f"Error updating user info: {e}")
             return False

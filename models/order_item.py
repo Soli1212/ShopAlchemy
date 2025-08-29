@@ -17,8 +17,8 @@ class OrderItem(Base):
 
     id: Mapped[int] = mapped_column(BigInteger, autoincrement=True, primary_key=True)
 
-    order_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("orders.id", ondelete="CASCADE", onupdate="CASCADE")
+    order_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("orders.id", ondelete="CASCADE", onupdate="CASCADE")
     )
     product_id: Mapped[str] = mapped_column(
         String(36), ForeignKey("products.id", ondelete="SET NULL", onupdate="CASCADE")

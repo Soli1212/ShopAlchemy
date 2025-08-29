@@ -1,7 +1,7 @@
-import uuid
 from datetime import datetime
 from decimal import Decimal
 
+import uuid6
 from sqlalchemy import (
     DECIMAL,
     Boolean,
@@ -33,7 +33,7 @@ class Product(Base):
     id: Mapped[str] = mapped_column(
         String(36),
         primary_key=True,
-        default=lambda: str(uuid.uuid4()),
+        default=lambda: str(uuid6.uuid7()),
     )
 
     name: Mapped[str] = mapped_column(String(100), nullable=False)
@@ -47,6 +47,8 @@ class Product(Base):
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     base_price: Mapped[Decimal] = mapped_column(DECIMAL(10, 2), nullable=False)
+
+    discount_percentage: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
     main_image: Mapped[str] = mapped_column(String(200), nullable=False)
 
