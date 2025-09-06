@@ -1,3 +1,4 @@
 from .brand_repository import BrandRepository
 from .user_address_repository import UserAddressRepository
 from .user_repository import UserRepository
+from .category_repository import CategoryRepository

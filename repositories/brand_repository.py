@@ -1,5 +1,5 @@
 from logging import error
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -55,7 +55,7 @@ class BrandRepository:
         self,
         brand_id: int,
         page_size: int = 15,
-        existing: bool = False,
+        existing: bool = True,
         price_zone: Optional[tuple[int, int]] = None,
         sort_as: Sorting = Sorting.id_asc,
         last_id: Optional[str] = None,

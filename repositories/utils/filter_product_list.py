@@ -13,7 +13,6 @@ availability_subquery = (
             ProductVariant.stock > 0,
         )
     )
-    .limit(1)
     .exists()
 )
 
@@ -21,7 +20,7 @@ availability_subquery = (
 def apply_filters(
     query: Select,
     brand_id: Optional[int] = None,
-    existing: bool = False,
+    existing: bool = True,
     price_zone: Optional[tuple[int, int]] = None,
 ) -> Select:
 
