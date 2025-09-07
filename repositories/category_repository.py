@@ -1,17 +1,19 @@
 from logging import error
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
+
 from sqlalchemy import UUID, cast
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload, load_only
+
 from models import Category, Product, ProductCategory
+
 from .utils import Sorting, apply_filters, apply_sorting_and_keyset
 
 
 class CategoryRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
-
 
     # Cache result on redis for performance
     async def category_tree(self) -> List[Category]:

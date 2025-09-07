@@ -1,8 +1,10 @@
-from sqlalchemy import ForeignKey, Index, Integer, String, UniqueConstraint, Enum
+import enum
+
+from sqlalchemy import (Enum, ForeignKey, Index, Integer, String,
+                        UniqueConstraint)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from connection import Base
-import enum
 
 
 class CategoryLevel(enum.Enum):

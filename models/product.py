@@ -2,17 +2,8 @@ from datetime import datetime
 from decimal import Decimal
 
 import uuid6
-from sqlalchemy import (
-    DECIMAL,
-    Boolean,
-    DateTime,
-    ForeignKey,
-    Index,
-    Integer,
-    String,
-    Text,
-    func,
-)
+from sqlalchemy import (DECIMAL, Boolean, DateTime, ForeignKey, Index, Integer,
+                        String, Text, func)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from connection import Base
@@ -24,10 +15,9 @@ class Product(Base):
     __table_args__ = (
         Index("ix_products_name", "name", unique=True),
         Index("ix_products_brand_id", "brand_id"),
-        Index("ix_products_new", "new"),
-        Index("ix_products_lux", "lux"),
-        Index("ix_products_suggested", "suggested"),
-        Index("ix_products_trend", "trend"),
+        Index("ix_products_base_price", "base_price"),
+        Index("ix_products_discount_percentage", "discount_percentage"),
+        Index("ix_products_created_at", "created_at"),
     )
 
     id: Mapped[str] = mapped_column(
@@ -80,7 +70,8 @@ class Product(Base):
     product_attributes: Mapped[list["ProductAttribute"]] = relationship(  # type: ignore
         "ProductAttribute", back_populates="product"
     )
+    brand: Mapped["Brand"] = relationship("Brand", back_populates="products")  # type: ignore
+
     variants: Mapped[list["ProductVariant"]] = relationship(  # type: ignore
         "ProductVariant", back_populates="product"
     )
-    brand: Mapped["Brand"] = relationship("Brand", back_populates="products")  # type: ignore

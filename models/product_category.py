@@ -1,4 +1,5 @@
-from sqlalchemy import BigInteger, ForeignKey, Index, Integer, String, UniqueConstraint
+from sqlalchemy import (BigInteger, ForeignKey, Index, Integer, String,
+                        UniqueConstraint)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from connection import Base
@@ -11,6 +12,7 @@ class ProductCategory(Base):
     __tablename__ = "ProductCategories"
 
     id: Mapped[int] = mapped_column(BigInteger, autoincrement=True, primary_key=True)
+
     product_id: Mapped[str] = mapped_column(
         String(36),
         ForeignKey("products.id", ondelete="CASCADE", onupdate="CASCADE"),

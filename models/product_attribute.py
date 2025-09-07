@@ -1,4 +1,5 @@
-from sqlalchemy import BigInteger, ForeignKey, Index, Integer, String, UniqueConstraint
+from sqlalchemy import (BigInteger, ForeignKey, Index, Integer, String,
+                        UniqueConstraint)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from connection import Base
@@ -22,7 +23,7 @@ class ProductAttribute(Base):
         nullable=False,
     )
 
-    default_value: Mapped[str] = mapped_column(String(100))
+    value: Mapped[str] = mapped_column(String(100))
 
     product = relationship("Product", back_populates="product_attributes")
 
