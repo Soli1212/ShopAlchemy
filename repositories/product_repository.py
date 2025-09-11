@@ -4,9 +4,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload, load_only, selectinload
 
-from models import (Attribute, Brand, Category, Product, ProductAttribute,
-                    ProductCategory, ProductTag, ProductVariant, Tag,
-                    VariantConfig, VariantImage, VariantOption)
+from models import (
+    Attribute,
+    Brand,
+    Category,
+    Product,
+    ProductAttribute,
+    ProductCategory,
+    ProductTag,
+    ProductVariant,
+    Tag,
+    VariantConfig,
+    VariantImage,
+    VariantOption,
+)
 
 
 class ProductRepository:

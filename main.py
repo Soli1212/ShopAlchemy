@@ -2,7 +2,7 @@ from asyncio import run
 
 from connection import async_session, init_db
 from models import *
-from repositories.user_address_repository import UserAddressRepository
+#
 
 
 async def main():
