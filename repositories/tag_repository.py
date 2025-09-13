@@ -4,7 +4,6 @@ from typing import Dict, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import cast, UUID
-from sqlalchemy.orm import joinedload, load_only, selectinload
 from .utils import Sorting, apply_filters, apply_sorting_and_keyset
 
 from models import Tag, ProductTag, Product
@@ -14,7 +13,7 @@ class TagRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_tag_list(  
+    async def get_tag_list(
         self,
         last_id: int = 0,
         page_size: int = 10,
@@ -101,5 +100,5 @@ class TagRepository:
                 "next_page": has_next,
             }
         except Exception as e:
-            error(f"Error searching category products: {e}")
+            error(f"Error searching tag products: {e}")
             return None
