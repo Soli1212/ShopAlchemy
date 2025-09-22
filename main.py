@@ -4,16 +4,24 @@ from pprint import pprint
 from RedisServices.connection import RedisConnection
 from RedisServices.services import UserCartService
 
+from repositories import CartRepository
+from connection import get_db 
+from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import FastAPI, Depends
 
-async def main():
+app = FastAPI()
+
+
+
+@app.get('/')
+async def main(db: AsyncSession = Depends(get_db)):
     connection = await RedisConnection.connect()
     c = UserCartService(redis_client=connection)
-    await c.add_item("soheil", "variant_1", 2)
-    await c.add_item("soheil", "variant_2", 3)
-    c.edit_item("soheil", "variant_1", 5)
     r = await c.get_cart("soheil")
-    pprint(r, sort_dicts=True)
+    product_list = [i for i in r]
+    products = CartRepository(session=db)
+    cart = await products.get_cart(product_list)
+    return cart
 
 
-if __name__ == "__main__":
-    run(main=main())
+
