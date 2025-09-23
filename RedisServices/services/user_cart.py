@@ -14,7 +14,7 @@ class UserCartService:
         """Add item to user's cart with quantity."""
         try:
             await self.redis.hset(f"cart:{user_id}", product_variant_id, quantity)
-            self.redis.expire(f"cart:{user_id}", 172800)  # 2 days in seconds
+            self.redis.expire(f"cart:{user_id}", 172800)
             return True
         except Exception as e:
             error(e)

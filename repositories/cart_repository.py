@@ -3,8 +3,9 @@ from typing import List, Dict
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
-from models import Product
+from models import ProductVariant, Product
 
 
 
@@ -13,13 +14,17 @@ class CartRepository:
         self.session = session
 
     async def get_cart(self, product_ids: List[int]) -> Dict:
-        stmt = select(
-            Product.id,
-            Product.name,
-            Product.main_image,
-            Product.base_price,
-            Product.discount_percentage,
-        ).where(Product.id.in_(product_ids))
+        stmt = (
+            select(
+                Product.id,
+                Product.name,
+                Product.base_price,
+                Product.discount_percentage,
+                Product.main_image,
+            )   
+            .join(ProductVariant, ProductVariant.product_id == Product.id)
+            .where(ProductVariant.id.in_(product_ids))
+        )
 
         try:
             result = await self.session.execute(stmt)
