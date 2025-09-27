@@ -51,8 +51,6 @@ class Product(Base):
 
     main_image: Mapped[str] = mapped_column(String(200), nullable=False)
 
-    new: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-
     lux: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     suggested: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
