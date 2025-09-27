@@ -2,7 +2,7 @@ from .attributes import Attribute
 from .brand import Brand
 from .category import Category
 from .discount import Discount
-from .order import Order
+from .order import Order, OrderStatus
 from .order_item import OrderItem
 from .product import Product
 from .product_attribute import ProductAttribute

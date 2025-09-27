@@ -6,3 +6,4 @@ from .user_repository import UserRepository
 from .product_repository import ProductRepository
 from .tag_repository import TagRepository
 from .cart_repository import CartRepository
+from .order_repository import OrderRepository

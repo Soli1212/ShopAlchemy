@@ -29,7 +29,8 @@ class OrderItem(Base):
     )
 
     quantity: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
-    unit_price: Mapped[Decimal] = mapped_column(DECIMAL(8, 2), nullable=False)
+    product_unit_price: Mapped[Decimal] = mapped_column(DECIMAL(8, 2), nullable=False)
+    variant_price_override: Mapped[Decimal] = mapped_column(DECIMAL(8, 2), nullable=False)
     discounted_price: Mapped[Decimal | None] = mapped_column(
         DECIMAL(8, 2), nullable=True
     )
