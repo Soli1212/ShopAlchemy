@@ -1,11 +1,13 @@
 from logging import error
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import selectinload, load_only, contains_eager
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import contains_eager, load_only, selectinload
 
-from models import ProductVariant, Product, VariantConfig, VariantOption
+from models import Product, ProductVariant, VariantConfig, VariantOption
+
 
 class CartRepository:
     def __init__(self, session: AsyncSession):
@@ -26,14 +28,10 @@ class CartRepository:
                     Product.main_image,
                     Product.created_at,
                 ),
-                contains_eager(ProductVariant.config).load_only(
-                    VariantConfig.option_id,
-                    VariantConfig.value
-                )
-                .contains_eager(VariantConfig.option).load_only(
-                    VariantOption.name,
-                    VariantOption.label
-                )
+                contains_eager(ProductVariant.config)
+                .load_only(VariantConfig.option_id, VariantConfig.value)
+                .contains_eager(VariantConfig.option)
+                .load_only(VariantOption.name, VariantOption.label),
             )
             .where(ProductVariant.id.in_(variant_ids), ProductVariant.is_active == True)
         )

@@ -1,6 +1,7 @@
-from aioredis import Redis
 from logging import error
-from typing import Optional, Dict
+from typing import Dict, Optional
+
+from aioredis import Redis
 
 
 class UserCartService:

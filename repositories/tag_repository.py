@@ -1,12 +1,13 @@
 from logging import error
-
 from typing import Dict, Optional
+
+from sqlalchemy import UUID, cast
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy import cast, UUID
-from .utils import Sorting, apply_filters, apply_sorting_and_keyset
 
-from models import Tag, ProductTag, Product
+from models import Product, ProductTag, Tag
+
+from .utils import Sorting, apply_filters, apply_sorting_and_keyset
 
 
 class TagRepository:

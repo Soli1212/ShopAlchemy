@@ -63,7 +63,7 @@ class Order(Base):
     final_amount: Mapped[Decimal] = mapped_column(DECIMAL(8, 2))
 
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
-    # payment_gateway: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    
     transaction_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     paid_at: Mapped[datetime | None] = mapped_column(nullable=True)

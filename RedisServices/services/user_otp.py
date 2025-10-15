@@ -1,13 +1,14 @@
-from aioredis import Redis
 from logging import error
-from typing import Optional, Dict
+from typing import Dict, Optional
+
+from aioredis import Redis
 
 
 class UserOtpService:
     def __init__(self, redis_client: Redis):
         """Initialize UserOtpService with Redis client."""
         self.redis = redis_client
-    
+
     async def save_otp(self, phone: str, otp: int, expiry: int = 180) -> bool:
         """Save OTP for phone number with expiry time."""
         try:
@@ -16,7 +17,7 @@ class UserOtpService:
         except Exception as e:
             error(f"Error saving OTP for user {phone}: {e}")
             return False
-    
+
     async def get_otp(self, phone: str) -> Optional[int]:
         """Retrieve OTP for phone number."""
         try:
@@ -25,7 +26,7 @@ class UserOtpService:
         except Exception as e:
             error(f"Error retrieving OTP for user {phone}: {e}")
             return None
-        
+
     async def delete_otp(self, phone: str) -> bool:
         """Delete OTP for phone number."""
         try:
@@ -34,7 +35,7 @@ class UserOtpService:
         except Exception as e:
             error(f"Error deleting OTP for user {phone}: {e}")
             return False
-        
+
     async def otp_exists(self, phone: str) -> bool:
         """Check if OTP exists for phone number."""
         try:

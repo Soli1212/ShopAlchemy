@@ -1,7 +1,8 @@
-from aioredis import Redis, from_url
-from os import getenv
-from dotenv import load_dotenv
 import logging
+from os import getenv
+
+from aioredis import Redis, from_url
+from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()

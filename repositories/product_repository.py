@@ -1,11 +1,10 @@
+from enum import Enum
 from logging import error
+from typing import Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload, load_only, selectinload
-from .utils import apply_sorting_and_keyset, Sorting
-from typing import Optional
-from enum import Enum
 
 from models import (
     Attribute,
@@ -22,10 +21,13 @@ from models import (
     VariantOption,
 )
 
+from .utils import Sorting, apply_sorting_and_keyset
+
+
 class target_product(Enum):
-    discouunted = "discounted",
-    suggested = "suggested",
-    trend = "trend",
+    discouunted = ("discounted",)
+    suggested = ("suggested",)
+    trend = ("trend",)
 
 
 class ProductRepository:
@@ -92,14 +94,14 @@ class ProductRepository:
         except Exception as e:
             error(f"Error fetching product by id {product_id}: {e}")
             return None
-        
+
     async def get_special_products(
-            self,
-            last_id: Optional[str] = None,
-            last_sort_value: Optional[str] = None,
-            target_products: Enum = None,
-            page_size: int = 15,
-        ):
+        self,
+        last_id: Optional[str] = None,
+        last_sort_value: Optional[str] = None,
+        target_products: Enum = None,
+        page_size: int = 15,
+    ):
         stmt = select(
             Product.id.label("product_id"),
             Product.name.label("product_name"),
@@ -141,4 +143,3 @@ class ProductRepository:
         except Exception as e:
             error(f"Error fetching discounted products: {e}")
             return None
-        

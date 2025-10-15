@@ -1,5 +1,6 @@
 from aioredis import Redis
 
+
 class TokenManagementService:
     def __init__(self, redis_client: Redis):
         """Initialize TokenManagementService with Redis client."""
