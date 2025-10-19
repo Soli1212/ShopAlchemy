@@ -1,10 +1,10 @@
 from enum import Enum
 from logging import error
 from typing import Optional
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload, load_only, selectinload
+from sqlalchemy import func
 
 from models import (
     Attribute,
@@ -23,11 +23,39 @@ from models import (
 
 from .utils import Sorting, apply_sorting_and_keyset
 
-
+#----------------------------------------
 class target_product(Enum):
-    discouunted = ("discounted",)
-    suggested = ("suggested",)
-    trend = ("trend",)
+    discouunted = "discounted"
+    suggested = "suggested"
+    trend = "trend"
+
+    @classmethod
+    def generate(cls, text: str) -> Enum:
+        if text not in (cls.discouunted.value, cls.suggested.value, cls.trend.value):
+            return False
+        return cls(text)
+
+class randome_product(Enum):
+    brand: str = "brand"
+    category: str = "category"
+    tag: str = "tag"
+    discounted = "discounted"
+    suggested = "suggested"
+    trend = "trend"
+
+    @classmethod
+    def generate(cls, text: str) -> Enum:
+        if text not in (
+            cls.brand.value, 
+            cls.category.value, 
+            cls.tag.value,
+            cls.discounted.value, 
+            cls.suggested.value, 
+            cls.trend.value
+        ):
+            return False
+        return cls(text)
+#----------------------------------------
 
 
 class ProductRepository:
@@ -142,4 +170,48 @@ class ProductRepository:
 
         except Exception as e:
             error(f"Error fetching discounted products: {e}")
+            return None
+        
+    async def get_randome_products(
+        self, 
+        randome_side: randome_product, 
+        value: str | int,
+        count: int = 10
+    ):
+        stmt = select(Product).options(
+            load_only(
+                Product.id,
+                Product.name,
+                Product.base_price,
+                Product.discount_percentage,
+                Product.main_image,
+            )
+        )
+
+        if randome_side is False:
+            print("Invalid randome_side value")
+            return None
+        
+        match randome_side:
+            case randome_product.brand:
+                stmt = stmt.where(Product.brand_id == value)
+            case randome_product.category:
+                stmt = stmt.join(ProductCategory).where(ProductCategory.category_id == value)
+            case randome_product.tag:
+                stmt = stmt.join(ProductTag).where(ProductTag.tag_id == value)
+            case randome_product.discounted:
+                stmt = stmt.where(Product.discount_percentage > 0)
+            case randome_product.trend:
+                stmt = stmt.where(Product.trend == True)
+            case randome_product.suggested:
+                stmt = stmt.where(Product.suggested == True)
+
+        stmt = stmt.order_by(func.random())
+        stmt = stmt.limit(count)
+
+        try:
+            result = await self.session.execute(stmt)
+            return result.scalars().all()
+        except Exception as e:
+            error(f"Error fetching randome products by {randome_side}: {e}")
             return None
