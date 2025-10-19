@@ -101,3 +101,13 @@ class BrandRepository:
         except Exception as e:
             error(f"Error searching brand products: {e}")
             return None
+
+    async def serach_brand(self, brand_name: str) -> Optional[Dict]:
+        stmt = select(Brand).where(Brand.name.ilike(f"%{brand_name}%"))
+
+        try:
+            result = await self.session.execute(stmt)
+            return result.scalars().fetchmany()
+        except:
+            error(f"Error searching brand by name {brand_name}")
+            return None
