@@ -33,10 +33,15 @@ class CategoryRepository:
             )
             .filter(Category.parent_id == None)
         )
-        result = await self.session.execute(stmt)
-        return result.unique().scalars().all()
+        try:
+            result = await self.session.execute(stmt)
+            return result.unique().scalars().all()
+        except Exception as e:
+            error(f"Error get category_tree: {e}")
+            return None
 
-    async def get_product_categories(
+
+    async def get_categories_products(
         self,
         category_ids: List[int],
         brand_id: Optional[int] = None,
@@ -60,34 +65,34 @@ class CategoryRepository:
             .filter(ProductCategory.category_id.in_(category_ids))
         )
 
+        stmt = apply_filters(
+            query=stmt,
+            brand_id=brand_id,
+            existing=existing,
+            price_zone=price_zone,
+        )
+
+        stmt = apply_sorting_and_keyset(
+            query=stmt,
+            sort_as=sort_as,
+            last_id=last_id,
+            last_value=last_sort_value,
+            page_size=page_size + 1,
+        )
+
+        match sort_as:
+            case Sorting.price_asc | Sorting.price_desc:
+                stmt = stmt.distinct(Product.base_price, cast(Product.id, UUID))
+            case Sorting.new_desc:
+                stmt = stmt.distinct(Product.created_at, cast(Product.id, UUID))
+            case Sorting.discount:
+                stmt = stmt.distinct(
+                    Product.discount_percentage, cast(Product.id, UUID)
+                )
+            case Sorting.id_asc:
+                stmt = stmt.distinct(cast(Product.id, UUID))
+
         try:
-            stmt = apply_filters(
-                query=stmt,
-                brand_id=brand_id,
-                existing=existing,
-                price_zone=price_zone,
-            )
-
-            stmt = apply_sorting_and_keyset(
-                query=stmt,
-                sort_as=sort_as,
-                last_id=last_id,
-                last_value=last_sort_value,
-                page_size=page_size + 1,
-            )
-
-            match sort_as:
-                case Sorting.price_asc | Sorting.price_desc:
-                    stmt = stmt.distinct(Product.base_price, cast(Product.id, UUID))
-                case Sorting.new_desc:
-                    stmt = stmt.distinct(Product.created_at, cast(Product.id, UUID))
-                case Sorting.discount:
-                    stmt = stmt.distinct(
-                        Product.discount_percentage, cast(Product.id, UUID)
-                    )
-                case Sorting.id_asc:
-                    stmt = stmt.distinct(cast(Product.id, UUID))
-
             result = await self.session.execute(stmt)
             rows = result.mappings().all()
 

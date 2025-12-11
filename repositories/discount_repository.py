@@ -19,7 +19,7 @@ class DiscountRepository:
         query = (
             update(Discount)
             .where(Discount.id == discount_id)
-            .values(used_count=used_count)
+            .values(used_count=Discount.used_count + used_count)
         )
         await self.session.execute(query)
 
@@ -27,7 +27,7 @@ class DiscountRepository:
         query = (
             update(Discount)
             .where(Discount.id == discount_id)
-            .values(is_active=is_active)
+            .values({"is_active": is_active})
         )
         await self.session.execute(query)
 
