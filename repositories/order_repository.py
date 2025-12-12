@@ -69,9 +69,7 @@ class OrderRepository:
                 Order.user_id == user_id
             )
         )
-        stmt = stmt.values(
-            {"status":status}
-        ).returning(
+        stmt = stmt.values( {"status" : status} ).returning(
             Order.id,
             Order.status,
             Order.total_amount,

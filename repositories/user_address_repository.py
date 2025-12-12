@@ -78,24 +78,18 @@ class UserAddressRepository:
     ) -> Optional[UserAddress]:
         """Update user address safely by explicit params only"""
 
-        update_data = {}
+        update_data = {
+            "full_name": full_name,
+            "phone_number": phone_number,
+            "province": province,
+            "city" : city,
+            "postal_code" : postal_code,
+            "plaque" : plaque,
+            "address_line" : address_line,
+            "is_default" : is_default
+        }
 
-        if full_name is not None:
-            update_data["full_name"] = full_name
-        if phone_number is not None:
-            update_data["phone_number"] = phone_number
-        if province is not None:
-            update_data["province"] = province
-        if city is not None:
-            update_data["city"] = city
-        if postal_code is not None:
-            update_data["postal_code"] = postal_code
-        if plaque is not None:
-            update_data["plaque"] = plaque
-        if address_line is not None:
-            update_data["address_line"] = address_line
-        if is_default is not None:
-            update_data["is_default"] = is_default
+        update_data = {k : v for k, v in update_data.items() if v is not None}
 
         if not update_data:
             return None
