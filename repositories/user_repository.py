@@ -94,20 +94,18 @@ class UserRepository:
         gender: Optional[Gender] = None,
     ) -> Optional[User]:
         """update user profile"""
-        update_data = {}
-        if first_name is not None:
-            update_data["first_name"] = first_name
-        if last_name is not None:
-            update_data["last_name"] = last_name
-        if email is not None:
-            update_data["email"] = email
-        if birth_date is not None:
-            update_data["birth_date"] = birth_date
-        if gender is not None:
-            update_data["gender"] = gender
+        update_data = {
+            "user_id": user_id,
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "birth_date": birth_date,
+            "gender": gender
+        }
 
-        if not update_data:
-            return False
+        update_data = {k : v for k, v in update_data.items() if v is not None}
+
+        if not update_data: return False
 
         stmt = (
             update(User).where(User.id == user_id).values(**update_data).returning(User)
